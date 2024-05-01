@@ -20,5 +20,13 @@ namespace StringCalculator.Tests
 
             result.Should().Be(0);
         }
+
+        [Test]
+        public void return_three_when_numbers_contains_only_three_number()
+        {
+            var result = sut.Add("3");
+
+            result.Should().Be(3);
+        }
     }
 }
