@@ -28,5 +28,13 @@ namespace StringCalculator.Tests
 
             result.Should().Be(3);
         }
+
+        [Test]
+        public void return_four_when_numbers_contains_only_four_number()
+        {
+            var result = sut.Add("4");
+
+            result.Should().Be(4);
+        }
     }
 }
