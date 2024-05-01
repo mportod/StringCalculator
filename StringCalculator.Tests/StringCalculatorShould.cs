@@ -73,5 +73,13 @@ namespace StringCalculator.Tests
 
             result.Should().Be(sum);
         }
+
+        [Test]
+        public void return_sum_when_numbers_contains_repeated_specify_separator_into_brackets()
+        {
+            var result = sut.Add("//[;;;]\n1;;;1001;;;4");
+
+            result.Should().Be(5);
+        }
     }
 }

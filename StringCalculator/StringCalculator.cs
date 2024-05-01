@@ -1,4 +1,7 @@
-﻿namespace StringCalculator;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
+
+namespace StringCalculator;
 
 public class StringCalculator
 {
@@ -17,14 +20,14 @@ public class StringCalculator
         return string.IsNullOrEmpty(numbersSeparatedByDelimiters);
     }
 
-    private List<int> GetNumbers(string numbersSeparatedByDelimiters)
+    private List<int> GetNumbers(string stringWithNumbers)
     {
         var numbers = new List<int>();
-        if (HasSpecificDelimiter(numbersSeparatedByDelimiters))
+        if (HasSpecificDelimiter(stringWithNumbers))
         {
-            var delimiter = numbersSeparatedByDelimiters[2];
-            numbers = numbersSeparatedByDelimiters
-                .Substring(4)
+            char delimiter = GetSpecificDelimiter(stringWithNumbers);
+            var stringWithoutSpecification= GetNumbersWithoutSpecification(stringWithNumbers);
+            numbers = stringWithoutSpecification
                 .Split(delimiter)
                 .Select(int.Parse)
                 .ToList();
@@ -32,7 +35,7 @@ public class StringCalculator
         else
         {
             var delimiters = new List<string> { "\n", "," };
-            numbers = numbersSeparatedByDelimiters
+            numbers = stringWithNumbers
                 .Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .ToList();
@@ -76,5 +79,28 @@ public class StringCalculator
         return numbers.Any(n => n < 0);
     }
 
-  
+    private char GetSpecificDelimiter(string stringWithNumbers)
+    {
+        if (stringWithNumbers.Contains("["))
+            return stringWithNumbers[stringWithNumbers.IndexOf('[') + 1];
+     
+        return stringWithNumbers[2];
+    }
+
+    private string GetNumbersWithoutSpecification(string stringWithNumbers)
+    {
+        if (stringWithNumbers.Contains("["))
+        {
+            var delimiter = GetSpecificDelimiter(stringWithNumbers);
+            var stringWithoutSpecification = stringWithNumbers.Substring(stringWithNumbers.IndexOf('\n') + 1);
+            return GetNumbersWithOneDelimiterOcurrence(stringWithoutSpecification, delimiter);
+        }
+
+        return stringWithNumbers.Substring(4);
+    }
+
+    private string GetNumbersWithOneDelimiterOcurrence(string stringWithNumbers, char delimiter){
+        string pattern = $"{Regex.Escape(delimiter.ToString())}{{2,}}";
+        return Regex.Replace(stringWithNumbers, pattern, delimiter.ToString());
+    }
 }
