@@ -66,11 +66,11 @@ namespace StringCalculator.Tests
         }
 
         [Test]
-        public void return_sum_ignoring_numbers_greater_than_1000_when_numbers_contains_numbers_to_add()
+        public void return_sum_ignoring_numbers_greater_than_1000()
         {
-            var result = sut.Add("//;\n1;1001;999");
+            var result = sut.Add("//;\n1;1001;4");
 
-            result.Should().Be(1000);
+            result.Should().Be(5);
         }
     }
 }

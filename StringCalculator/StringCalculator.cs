@@ -7,12 +7,9 @@ public class StringCalculator
         if (IsEmptyString(numbersSeparatedByDelimiters))
             return 0;
 
-        if (HasSpecificDelimiter(numbersSeparatedByDelimiters))
-        {
-            return AddWithSpecificDelimiter(numbersSeparatedByDelimiters);
-        }
-
-        return AddWithDefaultDelimiters(numbersSeparatedByDelimiters);
+        var numbers = GetNumbers(numbersSeparatedByDelimiters);
+        ValidateNumbers(numbers);
+        return numbers.Sum();
     }
 
     private static bool IsEmptyString(string numbersSeparatedByDelimiters)
@@ -20,30 +17,33 @@ public class StringCalculator
         return string.IsNullOrEmpty(numbersSeparatedByDelimiters);
     }
 
-    private static int AddWithDefaultDelimiters(string numbersSeparatedByDelimiters)
+    private List<int> GetNumbers(string numbersSeparatedByDelimiters)
     {
-        var delimiters = new List<string> { "\n", "," };
-        var numbers = numbersSeparatedByDelimiters
-            .Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries)
-            .Select(int.Parse)
-            .ToList();
-
-        ValidateNumbers(numbers);
-        return numbers.Sum();
+        var numbers = new List<int>();
+        if (HasSpecificDelimiter(numbersSeparatedByDelimiters))
+        {
+            var delimiter = numbersSeparatedByDelimiters[2];
+            numbers = numbersSeparatedByDelimiters
+                .Substring(4)
+                .Split(delimiter)
+                .Select(int.Parse)
+                .ToList();
+        }
+        else
+        {
+            var delimiters = new List<string> { "\n", "," };
+            numbers = numbersSeparatedByDelimiters
+                .Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse)
+                .ToList();
+        }
+        
+        return GetNumbersLessThanThousand(numbers);
     }
 
-    private static int AddWithSpecificDelimiter(string numbersSeparatedByDelimiters)
+    private static List<int> GetNumbersLessThanThousand(List<int> numbers)
     {
-        var delimiter = numbersSeparatedByDelimiters[2];
-        var numbers = numbersSeparatedByDelimiters
-            .Substring(4)
-            .Split(delimiter)
-            .Select(int.Parse)
-            .Where(n => n <= 1000)
-            .ToList();
-       
-        ValidateNumbers(numbers);
-        return numbers.Sum();
+        return numbers.Where(n => n <= 1000).ToList();
     }
 
     private static bool HasSpecificDelimiter(string numbersSeparatedByDelimiters)
@@ -75,4 +75,6 @@ public class StringCalculator
     {
         return numbers.Any(n => n < 0);
     }
+
+  
 }
