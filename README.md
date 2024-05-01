@@ -1,2 +1,2 @@
 # StringCalculator
-TDD Kata
+Tdd Kata
