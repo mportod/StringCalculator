@@ -29,20 +29,14 @@ namespace StringCalculator.Tests
 
             result.Should().Be(number);
         }
-        
-        [Test]
-        public void return_five_when_numbers_contains_numbers_two_and_three()
+      
+        [TestCase("2,3", 5)]
+        [TestCase("2,4", 6)]
+        public void return_sum_when_numbers_contains_two_numbers(string numbersSeparatedByComma, int sum)
         {
-            var result = sut.Add("2,3");
+            var result = sut.Add(numbersSeparatedByComma);
 
-            result.Should().Be(5);
-        }
-        [Test]
-        public void return_six_when_numbers_contains_numbers_two_and_four()
-        {
-            var result = sut.Add("2,4");
-
-            result.Should().Be(6);
+            result.Should().Be(sum);
         }
     }
 }
