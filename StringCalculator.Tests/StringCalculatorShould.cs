@@ -75,7 +75,7 @@ namespace StringCalculator.Tests
         }
 
         [Test]
-        public void return_sum_when_numbers_contains_repeated_specify_separator_into_brackets()
+        public void return_sum_when_numbers_contains_repeated_same_delimiter_into_brackets()
         {
             var result = sut.Add("//[;;;]\n1;;;1001;;;4");
 
@@ -83,7 +83,7 @@ namespace StringCalculator.Tests
         }
 
         [Test]
-        public void return_sum_when_numbers_contains_many_specify_separators_into_brackets()
+        public void return_sum_when_numbers_contains_many_delimiters_into_brackets()
         {
             var result = sut.Add("//[**][%]\n1**2%3");
 
