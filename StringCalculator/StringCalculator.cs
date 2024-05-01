@@ -4,26 +4,26 @@ namespace StringCalculator;
 
 public class StringCalculator
 {
-    public int Add(string numbersSeparatedByDelimiters)
+    public int Add(string numbersAndDelimiters)
     {
-        if (IsEmptyString(numbersSeparatedByDelimiters))
+        if (IsEmptyString(numbersAndDelimiters))
             return 0;
 
-        var numbers = GetNumbers(numbersSeparatedByDelimiters);
+        var numbers = GetNumbers(numbersAndDelimiters);
         ValidateNumbers(numbers);
         return numbers.Sum();
     }
 
-    private static bool IsEmptyString(string numbersSeparatedByDelimiters)
+    private static bool IsEmptyString(string numbersAndDelimiters)
     {
-        return string.IsNullOrEmpty(numbersSeparatedByDelimiters);
+        return string.IsNullOrEmpty(numbersAndDelimiters);
     }
 
-    private List<int> GetNumbers(string stringWithNumbers)
+    private List<int> GetNumbers(string numbersAndDelimiters)
     {
-        var delimiters = GetDelimiters(ref stringWithNumbers);
-        var onlyNumbers = GetNumbersWithoutDelimitersSpecification(stringWithNumbers);
-        onlyNumbers = NumbersWithOneDelimiter(delimiters, delimiters.First(), onlyNumbers);
+        var delimiters = GetDelimiters(numbersAndDelimiters);
+        var onlyNumbers = GetNumbersWithoutDelimitersSpecification(numbersAndDelimiters);
+        onlyNumbers = GetNumbersReplacedWithOneDelimiter(delimiters, delimiters.First(), onlyNumbers);
         var numbers = onlyNumbers
             .Split(delimiters.First())
             .Select(int.Parse)
@@ -32,7 +32,7 @@ public class StringCalculator
         return GetNumbersLessThanThousand(numbers);
     }
 
-    private static string NumbersWithOneDelimiter(List<string> delimiters, string newDelimiter, string stringWithoutSpecification)
+    private static string GetNumbersReplacedWithOneDelimiter(List<string> delimiters, string newDelimiter, string stringWithoutSpecification)
     {
         delimiters.ForEach(d => stringWithoutSpecification = stringWithoutSpecification.Replace(d, newDelimiter));
         string pattern = $"{Regex.Escape(newDelimiter)}{{2,}}";
@@ -76,7 +76,7 @@ public class StringCalculator
 
         if (numbers.Contains("[") && numbers.Contains("]"))
         {
-            var firstNumberIndex = numbers.LastIndexOf(']') + 1;
+            var firstNumberIndex = numbers.LastIndexOf(']') + 2;
             return numbers.Substring(firstNumberIndex);
         }
         else
@@ -86,7 +86,7 @@ public class StringCalculator
         }
     }
     
-    private static List<string> GetDelimiters(ref string numbers)
+    private static List<string> GetDelimiters(string numbers)
     {
         var delimiters = new List<string>() { ",", "\n" };
         if (numbers.Contains("//"))
@@ -96,12 +96,10 @@ public class StringCalculator
                 Regex regex = new Regex(@"\[(.+?)\]");
                 var delimits = regex.Matches(numbers);
                 delimiters.AddRange(delimits.Select(delimit => delimit.Groups[1].Value));
-                numbers = numbers.Substring(numbers.IndexOf("\n", StringComparison.Ordinal) + 1);
             }
             else
             {
                 delimiters.Add(numbers[2].ToString());
-                numbers = numbers.Substring(4);
             }
         }
         return delimiters;
