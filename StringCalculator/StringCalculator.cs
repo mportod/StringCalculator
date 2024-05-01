@@ -53,7 +53,21 @@ public class StringCalculator
     private static void ValidateNumbers(List<int> numbers)
     {
         if (ContainsNegativeNumbers(numbers))
-            throw new ArgumentException("negatives not allowed");
+        {
+            var negativeNumbers = GetNegativeNumbers(numbers);
+            var negativeNumbersAsString = GetNumbersOnStringWithDelimiter(negativeNumbers, ",");
+            throw new ArgumentException($"negatives not allowed ({negativeNumbersAsString})");
+        }
+    }
+
+    private static string GetNumbersOnStringWithDelimiter(List<int> numbers, string delimiter)
+    {
+        return String.Join(delimiter, numbers.ToArray());
+    }
+
+    private static List<int> GetNegativeNumbers(List<int> numbers)
+    {
+        return numbers.Where(n => n < 0).ToList();
     }
 
     private static bool ContainsNegativeNumbers(List<int> numbers)
