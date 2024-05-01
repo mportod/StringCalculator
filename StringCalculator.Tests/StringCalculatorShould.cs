@@ -64,5 +64,13 @@ namespace StringCalculator.Tests
             action.Should()
                 .Throw<ArgumentException>().And.Message.Should().Be($"negatives not allowed ({negativeNumbers})");
         }
+
+        [Test]
+        public void return_sum_ignoring_numbers_greater_than_1000_when_numbers_contains_numbers_to_add()
+        {
+            var result = sut.Add("//;\n1;1001;999");
+
+            result.Should().Be(1000);
+        }
     }
 }

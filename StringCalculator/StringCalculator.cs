@@ -39,6 +39,7 @@ public class StringCalculator
             .Substring(4)
             .Split(delimiter)
             .Select(int.Parse)
+            .Where(n => n <= 1000)
             .ToList();
        
         ValidateNumbers(numbers);
