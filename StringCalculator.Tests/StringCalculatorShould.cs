@@ -29,31 +29,23 @@ namespace StringCalculator.Tests
 
             result.Should().Be(number);
         }
-      
-        [TestCase("2,4", 6)]
-        [TestCase("2,3,5", 10)]
-        public void return_sum_when_numbers_contains_numbers_separated_by_comma(string numbersSeparatedByComma, int sum)
+
+        [TestCase("2,4", 6, Description = "step 1")]
+        [TestCase("2,3,5", 10, Description = "step 2")]
+        [TestCase("1\n2,3", 6, Description = "step 3")]
+        [TestCase("1\n2,3\n,4", 10, Description = "step 3")]
+        [TestCase("//;\n1;3", 4, Description = "step 4")]
+        [TestCase("2,1005,4500,3,1", 6, Description = "step 5")]
+        [TestCase("//;\n1;1001;4", 5, Description = "step 5")]
+        [TestCase("//[;;;]\n1;;;1001;;;4", 5, Description = "step 7")]
+        [TestCase("//[*][%]\n1**2%3", 6, Description = "step 8")]
+        [TestCase("//[**][%%%]\n1**2%%%3", 6, Description = "step 9")]
+        [TestCase("//[**][%-]\n1**2%-3", 6)]
+        public void return_sum_when_numbers_contains_numbers(string numbers, int sum)
         {
-            var result = sut.Add(numbersSeparatedByComma);
+            var result = sut.Add(numbers);
 
             result.Should().Be(sum);
-        }
-
-        [TestCase("1\n2,3", 6)]
-        [TestCase("1\n2,3\n,4", 10)]
-        public void return_sum_when_numbers_contains_line_break_character(string numbersSeparatedByDelimiters, int sum)
-        {
-            var result = sut.Add(numbersSeparatedByDelimiters);
-
-            result.Should().Be(sum);
-        }
-
-        [Test]
-        public void return_sum_when_numbers_contains_specify_separator_and_numbers()
-        {
-            var result = sut.Add("//;\n1;3");
-
-            result.Should().Be(4);
         }
 
         [TestCase("-2,3", "-2")]
@@ -63,31 +55,6 @@ namespace StringCalculator.Tests
             var action = () => sut.Add(numbers);
             action.Should()
                 .Throw<ArgumentException>().And.Message.Should().Be($"negatives not allowed ({negativeNumbers})");
-        }
-
-        [TestCase("2,1005,4500,3,1",6)]
-        [TestCase("//;\n1;1001;4", 5)]
-        public void return_sum_ignoring_numbers_greater_than_1000(string numbers, int sum)
-        {
-            var result = sut.Add(numbers);
-
-            result.Should().Be(sum);
-        }
-
-        [Test]
-        public void return_sum_when_numbers_contains_repeated_same_delimiter_into_brackets()
-        {
-            var result = sut.Add("//[;;;]\n1;;;1001;;;4");
-
-            result.Should().Be(5);
-        }
-
-        [Test]
-        public void return_sum_when_numbers_contains_many_delimiters_into_brackets()
-        {
-            var result = sut.Add("//[**][%]\n1**2%3");
-
-            result.Should().Be(6);
         }
     }
 }
