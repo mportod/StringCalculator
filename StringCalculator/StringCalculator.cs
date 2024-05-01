@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace StringCalculator;
 
@@ -22,36 +21,28 @@ public class StringCalculator
 
     private List<int> GetNumbers(string stringWithNumbers)
     {
-        var numbers = new List<int>();
-        if (HasSpecificDelimiter(stringWithNumbers))
-        {
-            char delimiter = GetSpecificDelimiter(stringWithNumbers);
-            var stringWithoutSpecification= GetNumbersWithoutSpecification(stringWithNumbers);
-            numbers = stringWithoutSpecification
-                .Split(delimiter)
-                .Select(int.Parse)
-                .ToList();
-        }
-        else
-        {
-            var delimiters = new List<string> { "\n", "," };
-            numbers = stringWithNumbers
-                .Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse)
-                .ToList();
-        }
-        
+        var delimiters = GetDelimiters(ref stringWithNumbers);
+        var onlyNumbers = GetNumbersWithoutDelimitersSpecification(stringWithNumbers);
+        onlyNumbers = NumbersWithOneDelimiter(delimiters, delimiters.First(), onlyNumbers);
+        var numbers = onlyNumbers
+            .Split(delimiters.First())
+            .Select(int.Parse)
+            .ToList();
+
         return GetNumbersLessThanThousand(numbers);
+    }
+
+    private static string NumbersWithOneDelimiter(List<string> delimiters, string newDelimiter, string stringWithoutSpecification)
+    {
+        delimiters.ForEach(d => stringWithoutSpecification = stringWithoutSpecification.Replace(d, newDelimiter));
+        string pattern = $"{Regex.Escape(newDelimiter)}{{2,}}";
+        stringWithoutSpecification = Regex.Replace(stringWithoutSpecification, pattern, newDelimiter);
+        return stringWithoutSpecification;
     }
 
     private static List<int> GetNumbersLessThanThousand(List<int> numbers)
     {
         return numbers.Where(n => n <= 1000).ToList();
-    }
-
-    private static bool HasSpecificDelimiter(string numbersSeparatedByDelimiters)
-    {
-        return numbersSeparatedByDelimiters.StartsWith("//");
     }
 
     private static void ValidateNumbers(List<int> numbers)
@@ -63,44 +54,56 @@ public class StringCalculator
             throw new ArgumentException($"negatives not allowed ({negativeNumbersAsString})");
         }
     }
-
+    private static List<int> GetNegativeNumbers(List<int> numbers)
+    {
+        return numbers.Where(n => n < 0).ToList();
+    }
+    
+    private static bool ContainsNegativeNumbers(List<int> numbers)
+    {
+        return numbers.Any(n => n < 0);
+    }
+    
     private static string GetNumbersOnStringWithDelimiter(List<int> numbers, string delimiter)
     {
         return String.Join(delimiter, numbers.ToArray());
     }
 
-    private static List<int> GetNegativeNumbers(List<int> numbers)
+    private string GetNumbersWithoutDelimitersSpecification(string numbers)
     {
-        return numbers.Where(n => n < 0).ToList();
-    }
+        if (!numbers.StartsWith("//"))
+            return numbers;
 
-    private static bool ContainsNegativeNumbers(List<int> numbers)
-    {
-        return numbers.Any(n => n < 0);
-    }
-
-    private char GetSpecificDelimiter(string stringWithNumbers)
-    {
-        if (stringWithNumbers.Contains("["))
-            return stringWithNumbers[stringWithNumbers.IndexOf('[') + 1];
-     
-        return stringWithNumbers[2];
-    }
-
-    private string GetNumbersWithoutSpecification(string stringWithNumbers)
-    {
-        if (stringWithNumbers.Contains("["))
+        if (numbers.Contains("[") && numbers.Contains("]"))
         {
-            var delimiter = GetSpecificDelimiter(stringWithNumbers);
-            var stringWithoutSpecification = stringWithNumbers.Substring(stringWithNumbers.IndexOf('\n') + 1);
-            return GetNumbersWithOneDelimiterOcurrence(stringWithoutSpecification, delimiter);
+            var firstNumberIndex = numbers.LastIndexOf(']') + 1;
+            return numbers.Substring(firstNumberIndex);
         }
-
-        return stringWithNumbers.Substring(4);
+        else
+        {
+            var firstNumberIndex = numbers.LastIndexOf('\n') + 1;
+            return numbers.Substring(firstNumberIndex);
+        }
     }
-
-    private string GetNumbersWithOneDelimiterOcurrence(string stringWithNumbers, char delimiter){
-        string pattern = $"{Regex.Escape(delimiter.ToString())}{{2,}}";
-        return Regex.Replace(stringWithNumbers, pattern, delimiter.ToString());
+    
+    private static List<string> GetDelimiters(ref string numbers)
+    {
+        var delimiters = new List<string>() { ",", "\n" };
+        if (numbers.Contains("//"))
+        {
+            if (numbers.Contains("[") && numbers.Contains("]"))
+            {
+                Regex regex = new Regex(@"\[(.+?)\]");
+                var delimits = regex.Matches(numbers);
+                delimiters.AddRange(delimits.Select(delimit => delimit.Groups[1].Value));
+                numbers = numbers.Substring(numbers.IndexOf("\n", StringComparison.Ordinal) + 1);
+            }
+            else
+            {
+                delimiters.Add(numbers[2].ToString());
+                numbers = numbers.Substring(4);
+            }
+        }
+        return delimiters;
     }
 }

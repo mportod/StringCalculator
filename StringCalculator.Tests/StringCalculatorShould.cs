@@ -81,5 +81,13 @@ namespace StringCalculator.Tests
 
             result.Should().Be(5);
         }
+
+        [Test]
+        public void return_sum_when_numbers_contains_many_specify_separators_into_brackets()
+        {
+            var result = sut.Add("//[**][%]\n1**2%3");
+
+            result.Should().Be(6);
+        }
     }
 }
