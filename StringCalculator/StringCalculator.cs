@@ -2,14 +2,14 @@
 
 public class StringCalculator
 {
-    public int Add(string numbersSeparatedByDelimiter)
+    public int Add(string numbersSeparatedByDelimiters)
     {
-        if (string.IsNullOrEmpty(numbersSeparatedByDelimiter))
+        if (string.IsNullOrEmpty(numbersSeparatedByDelimiters))
             return 0;
 
-        var numbers = numbersSeparatedByDelimiter
-            .Replace("\n", ",")
-            .Split(',')
+        var delimiters = new List<string> { "\n", "," };
+        var numbers = numbersSeparatedByDelimiters
+            .Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries)
             .Select(int.Parse)
             .ToList();
 

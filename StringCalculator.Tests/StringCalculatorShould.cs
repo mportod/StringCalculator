@@ -39,12 +39,13 @@ namespace StringCalculator.Tests
             result.Should().Be(sum);
         }
 
-        [Test]
-        public void return_sum_when_numbers_contains_line_break_character()
+        [TestCase("1\n2,3", 6)]
+        [TestCase("1\n2,3\n,4", 10)]
+        public void return_sum_when_numbers_contains_line_break_character(string numbersSeparatedByDelimiters, int sum)
         {
-            var result = sut.Add("1\n2,3");
+            var result = sut.Add(numbersSeparatedByDelimiters);
 
-            result.Should().Be(6);
+            result.Should().Be(sum);
         }
     }
 }
