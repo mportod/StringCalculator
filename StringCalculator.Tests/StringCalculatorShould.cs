@@ -38,5 +38,13 @@ namespace StringCalculator.Tests
 
             result.Should().Be(sum);
         }
+
+        [Test]
+        public void return_ten_when_numbers_contains_the_numbers_two_five_and_three()
+        {
+            var result = sut.Add("2,3,5");
+
+            result.Should().Be(10);
+        }
     }
 }
