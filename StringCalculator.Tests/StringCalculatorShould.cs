@@ -30,21 +30,13 @@ namespace StringCalculator.Tests
             result.Should().Be(number);
         }
       
-        [TestCase("2,3", 5)]
         [TestCase("2,4", 6)]
-        public void return_sum_when_numbers_contains_two_numbers(string numbersSeparatedByComma, int sum)
+        [TestCase("2,3,5", 10)]
+        public void return_sum_when_numbers_contains_numbers_separated_by_comma(string numbersSeparatedByComma, int sum)
         {
             var result = sut.Add(numbersSeparatedByComma);
 
             result.Should().Be(sum);
-        }
-
-        [Test]
-        public void return_ten_when_numbers_contains_the_numbers_two_five_and_three()
-        {
-            var result = sut.Add("2,3,5");
-
-            result.Should().Be(10);
         }
     }
 }
