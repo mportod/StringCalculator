@@ -38,5 +38,13 @@ namespace StringCalculator.Tests
 
             result.Should().Be(sum);
         }
+
+        [Test]
+        public void return_sum_when_numbers_contains_line_break_character()
+        {
+            var result = sut.Add("1\n2,3");
+
+            result.Should().Be(6);
+        }
     }
 }

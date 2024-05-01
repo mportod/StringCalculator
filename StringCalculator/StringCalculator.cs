@@ -2,12 +2,13 @@
 
 public class StringCalculator
 {
-    public int Add(string numbersSeparatedByComma)
+    public int Add(string numbersSeparatedByDelimiter)
     {
-        if (string.IsNullOrEmpty(numbersSeparatedByComma))
+        if (string.IsNullOrEmpty(numbersSeparatedByDelimiter))
             return 0;
 
-        var numbers = numbersSeparatedByComma
+        var numbers = numbersSeparatedByDelimiter
+            .Replace("\n", ",")
             .Split(',')
             .Select(int.Parse)
             .ToList();
