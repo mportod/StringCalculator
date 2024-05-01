@@ -58,7 +58,7 @@ namespace StringCalculator.Tests
 
         [TestCase("-2,3", "-2")]
         [TestCase("//;\n2;-3;-1", "-3,-1")]
-        public void get_an_error_when_numbers_contains_one_negative_number(string numbers, string negativeNumbers)
+        public void get_an_error_when_numbers_contains_negative_numbers(string numbers, string negativeNumbers)
         {
             var action = () => sut.Add(numbers);
             action.Should()
