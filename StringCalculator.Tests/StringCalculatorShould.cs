@@ -21,20 +21,13 @@ namespace StringCalculator.Tests
             result.Should().Be(0);
         }
 
-        [Test]
-        public void return_three_when_numbers_contains_only_three_number()
+        [TestCase(3)]
+        [TestCase(4)]
+        public void return_number_when_numbers_contains_only_one_number(int number)
         {
-            var result = sut.Add("3");
+            var result = sut.Add(number.ToString());
 
-            result.Should().Be(3);
-        }
-
-        [Test]
-        public void return_four_when_numbers_contains_only_four_number()
-        {
-            var result = sut.Add("4");
-
-            result.Should().Be(4);
+            result.Should().Be(number);
         }
     }
 }
