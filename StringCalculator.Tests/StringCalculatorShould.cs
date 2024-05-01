@@ -47,5 +47,13 @@ namespace StringCalculator.Tests
 
             result.Should().Be(sum);
         }
+
+        [Test]
+        public void return_sum_when_numbers_contains_specify_separator_and_numbers()
+        {
+            var result = sut.Add("//;\n1;3");
+
+            result.Should().Be(4);
+        }
     }
 }
