@@ -29,5 +29,13 @@ namespace StringCalculator.Tests
 
             result.Should().Be(number);
         }
+        
+        [Test]
+        public void return_five_when_when_numbers_contains_numbers_two_and_three_separated_by_comma()
+        {
+            var result = sut.Add("2,3");
+
+            result.Should().Be(5);
+        }
     }
 }

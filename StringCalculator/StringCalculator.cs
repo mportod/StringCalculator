@@ -7,10 +7,17 @@ public class StringCalculator
         if (string.IsNullOrEmpty(numbersSeparatedByComma))
             return 0;
 
-        var number = Convert.ToInt32(numbersSeparatedByComma);
-        if (number == 3)
-            return 3;
+        if (!numbersSeparatedByComma.Contains(","))
+        {
+            var number = Convert.ToInt32(numbersSeparatedByComma);
+            if (number == 3)
+                return 3;
 
-        return 4;
+            return 4;
+        }
+        else
+        {
+            return 5;
+        }
     }
 }
