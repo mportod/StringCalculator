@@ -28,9 +28,7 @@ public class StringCalculator
             .Select(int.Parse)
             .ToList();
 
-        if (numbers.Any(n => n < 0))
-            throw new ArgumentException("negatives not allowed");
-
+        ValidateNumbers(numbers);
         return numbers.Sum();
     }
 
@@ -42,14 +40,24 @@ public class StringCalculator
             .Split(delimiter)
             .Select(int.Parse)
             .ToList();
-        if (numbers.Any(n => n < 0))
-            throw new ArgumentException("negatives not allowed");
-
+       
+        ValidateNumbers(numbers);
         return numbers.Sum();
     }
 
     private static bool HasSpecificDelimiter(string numbersSeparatedByDelimiters)
     {
         return numbersSeparatedByDelimiters.StartsWith("//");
+    }
+
+    private static void ValidateNumbers(List<int> numbers)
+    {
+        if (ContainsNegativeNumbers(numbers))
+            throw new ArgumentException("negatives not allowed");
+    }
+
+    private static bool ContainsNegativeNumbers(List<int> numbers)
+    {
+        return numbers.Any(n => n < 0);
     }
 }
