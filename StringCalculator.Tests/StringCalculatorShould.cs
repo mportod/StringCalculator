@@ -31,7 +31,7 @@ namespace StringCalculator.Tests
         }
         
         [Test]
-        public void return_five_when_when_numbers_contains_numbers_two_and_three_separated_by_comma()
+        public void return_five_when_numbers_contains_numbers_two_and_three()
         {
             var result = sut.Add("2,3");
 
