@@ -28,6 +28,9 @@ public class StringCalculator
             .Select(int.Parse)
             .ToList();
 
+        if (numbers.Any(n => n < 0))
+            throw new ArgumentException("negatives not allowed");
+
         return numbers.Sum();
     }
 
@@ -39,7 +42,9 @@ public class StringCalculator
             .Split(delimiter)
             .Select(int.Parse)
             .ToList();
-            
+        if (numbers.Any(n => n < 0))
+            throw new ArgumentException("negatives not allowed");
+
         return numbers.Sum();
     }
 

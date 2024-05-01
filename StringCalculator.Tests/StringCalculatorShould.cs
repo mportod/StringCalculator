@@ -55,5 +55,14 @@ namespace StringCalculator.Tests
 
             result.Should().Be(4);
         }
+
+        [TestCase("-2,3")]
+        [TestCase("//;\n2;-3;-1")]
+        public void get_an_error_when_numbers_contains_one_negative_number(string numbers)
+        {
+            var action = () => sut.Add("-2,3");
+            action.Should()
+                .Throw<ArgumentException>().And.Message.Should().Be("negatives not allowed");
+        }
     }
 }
