@@ -37,5 +37,12 @@ namespace StringCalculator.Tests
 
             result.Should().Be(5);
         }
+        [Test]
+        public void return_six_when_numbers_contains_numbers_two_and_four()
+        {
+            var result = sut.Add("2,4");
+
+            result.Should().Be(6);
+        }
     }
 }
